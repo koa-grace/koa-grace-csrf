@@ -1,6 +1,8 @@
 'use strict';
 
 const Tokens = require('./lib/csrf');
+const debug = require('debug')('koa-grace:csrf');
+const error = require('debug')('koa-grace-error:csrf');
 
 
 module.exports = function Csrf(app, opts) {
@@ -24,12 +26,16 @@ module.exports = function Csrf(app, opts) {
       
       // token不存在
       if (!graceToken) {
-        return this.throw('CSRF Token Not Found!',403)
+        error('CSRF Token Not Found: ' + this.req.url)
+        // 暂时先不直接抛出错误
+        // return this.throw('CSRF Token Not Found!',403)
       }
 
       // token校验失败
       if (!tokens.verify(options.secret, graceToken)) {
-        return this.throw('CSRF token Invalid!',403)
+        error('CSRF token Invalid: ' + this.req.url)
+        // 暂时先不直接抛出错误
+        // return this.throw('CSRF token Invalid!',403)
       }
     }
 
@@ -37,7 +43,7 @@ module.exports = function Csrf(app, opts) {
 
     // 无论何种情况都种一个cookie，保证最新状态
     let newToken = tokens.create(options.secret);
-    
+
     this.cookies.set(options.cookie, newToken, {
       maxAge: 30 * 86400 * 1000
     })
