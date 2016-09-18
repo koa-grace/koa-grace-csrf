@@ -14,8 +14,8 @@ module.exports = function Csrf(app, opts) {
   let options = Object.assign({
     env: 'production',
     excluded: ['GET', 'HEAD', 'OPTIONS'],
-    cookie_token: 'GRACE_TOKEN',
-    cookie_key: 'GRACE_TOKEN_KEY',
+    cookie_token: 'grace_token',
+    cookie_key: 'grace_token_key',
     timeout: 30 * 86400 * 1000
   }, opts);
 
@@ -23,7 +23,9 @@ module.exports = function Csrf(app, opts) {
 
     if (options.excluded.indexOf(this.method) == -1) {
       let curSecret = this.cookies.get(options.cookie_key);
-      let curToken = (this.headers && this.headers[options.cookie_token]) ||
+      // headers的key要转成小写
+      let headerKey = options.cookie_token.toLowerCase();
+      let curToken = (this.headers && this.headers[headerKey]) ||
         (this.query && this.query[options.cookie_token]) ||
         (this.request.body && this.request.body[options.cookie_token]);
       
