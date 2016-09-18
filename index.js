@@ -23,9 +23,9 @@ module.exports = function Csrf(app, opts) {
 
     if (options.excluded.indexOf(this.method) == -1) {
       let curSecret = this.cookies.get(options.cookie_key);
-      // headers的key要转成小写
-      let headerKey = options.cookie_token.toLowerCase();
-      let curToken = (this.headers && this.headers[headerKey]) ||
+      // 如果是header的key，则固定为'x-grace-token'
+      // 其他如果要获取参数，则为配置参数值
+      let curToken = (this.headers && this.headers['x-grace-token']) ||
         (this.query && this.query[options.cookie_token]) ||
         (this.request.body && this.request.body[options.cookie_token]);
       
