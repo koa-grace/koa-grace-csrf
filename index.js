@@ -23,7 +23,8 @@ module.exports = function Csrf(app, opts) {
 
     if (options.excluded.indexOf(this.method) == -1) {
       let curSecret = this.cookies.get(options.cookie_key);
-      let curToken = (this.query && this.query[options.cookie_token]) ||
+      let curToken = (this.headers && this.headers[options.cookie_token]) ||
+        (this.query && this.query[options.cookie_token]) ||
         (this.request.body && this.request.body[options.cookie_token]);
       
       // token不存在
