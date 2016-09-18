@@ -1,0 +1,34 @@
+{
+  "name": "koa-grace-csrf",
+  "version": "0.0.1",
+  "description": "CSRF tokens for koa",
+  "main": "index.js",
+  "scripts": {
+    "test": "DEBUG=* node --harmony ./example/app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/koa-grace/koa-grace-csrf.git"
+  },
+  "keywords": [
+    "koa",
+    "koa-grace",
+    "csrf"
+  ],
+  "author": "xiongwilee",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/koa-grace/koa-grace-csrf/issues"
+  },
+  "homepage": "https://github.com/koa-grace/koa-grace-csrf#readme",
+  "dependencies": {
+    "debug": "^2.2.0",
+    "base64-url": "1.2.2",
+    "rndm": "1.2.0",
+    "tsscmp": "1.0.5",
+    "uid-safe": "2.1.1"
+  },
+  "devDependencies": {
+    "koa": "^1.2.0"
+  }
+}
