@@ -16,11 +16,12 @@ module.exports = function Csrf(app, opts) {
     excluded: ['GET', 'HEAD', 'OPTIONS'],
     cookie_token: 'grace_token',
     cookie_key: 'grace_token_key',
-    timeout: 30 * 86400 * 1000
+    timeout: 30 * 86400 * 1000,
+    throw: true
   }, opts);
 
   return function* csrf(next) {
-
+    
     if (options.excluded.indexOf(this.method) == -1) {
       let curSecret = this.cookies.get(options.cookie_key);
       // 如果是header的key，则固定为'x-grace-token'
@@ -32,15 +33,17 @@ module.exports = function Csrf(app, opts) {
       // token不存在
       if (!curToken || !curSecret) {
         error('CSRF Token Not Found: ' + this.req.url)
-        // 暂时先不直接抛出错误
-        // return this.throw('CSRF Token Not Found!',403)
+        
+        options.throw && this.throw('CSRF Token Not Found!',403);
+        return;
       }
 
       // token校验失败
       if (!tokens.verify(curSecret, curToken)) {
         error('CSRF token Invalid: ' + this.req.url)
-        // 暂时先不直接抛出错误
-        // return this.throw('CSRF token Invalid!',403)
+
+        options.throw && this.throw('CSRF token Invalid!',403)
+        return;
       }
     }
 
